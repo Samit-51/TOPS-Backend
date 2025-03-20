@@ -1,0 +1,222 @@
+.img-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 16px;
+}
+
+.img-card {
+	background: var(--grey);
+	border-radius: 10px;
+	padding: 10px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+}
+
+.img-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.img-name {
+	margin-top: 10px;
+	font-weight: 500;
+	color: var(--dark);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.img-location {
+	font-size: 12px;
+	color: var(--dark-grey);
+}
+
+/* Modal styles */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 3000;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+	background-color: var(--light);
+	margin: 10% auto;
+	padding: 20px;
+	border-radius: 10px;
+	width: 60%;
+	position: relative;
+	max-width: 800px;
+}
+
+.close-modal {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	color: var(--dark);
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.modal-img {
+	width: 100%;
+	max-height: 400px;
+	object-fit: contain;
+	border-radius: 5px;
+}
+
+.modal-details {
+	margin-top: 15px;
+}
+
+.modal-details p {
+	margin: 5px 0;
+}
+
+.modal-actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 15px;
+}
+
+.btn {
+	padding: 8px 16px;
+	border-radius: 36px;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.btn-primary {
+	background: var(--blue);
+	color: var(--light);
+}
+
+.btn-danger {
+	background: var(--red);
+	color: var(--light);
+}
+
+/* Upload section */
+.upload-section {
+	margin-top: 24px;
+	background: var(--light);
+	padding: 24px;
+	border-radius: 20px;
+}
+
+.upload-title {
+	font-size: 24px;
+	font-weight: 600;
+	margin-bottom: 16px;
+	color: var(--dark);
+}
+
+.upload-area {
+	border: 2px dashed var(--dark-grey);
+	border-radius: 10px;
+	padding: 30px;
+	text-align: center;
+	margin-bottom: 15px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+	border-color: var(--blue);
+}
+
+.upload-icon {
+	font-size: 48px;
+	color: var(--dark-grey);
+	margin-bottom: 10px;
+}
+
+.upload-text {
+	color: var(--dark);
+	margin-bottom: 15px;
+}
+
+.file-input {
+	display: none;
+}
+
+.preview-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	margin-top: 15px;
+}
+
+.preview-item {
+	position: relative;
+	width: 100px;
+	height: 100px;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.preview-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.remove-preview {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+/* New styles for page sections */
+.page-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--grey);
+}
+
+.section-title {
+    position: relative;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    color: var(--dark);
+    display: inline-block;
+}
+
+.section-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: var(--blue);
+    display: block;
+}
+
+/* Specific to home page */
+#home-upload-dropzone {
+    border-color: var(--blue);
+}
+
+/* Home section hover effect */
+.section-title:hover .section-underline {
+    background-color: var(--dark-blue);
+}

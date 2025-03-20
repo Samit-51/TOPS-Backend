@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="/adminhub/style.css">
+	<link rel="stylesheet" href="/adminhub/image-management/style.css">
+
+	<title>AdminHub - Image Management</title>
+</head>
+
+<body>
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-smile'></i>
+			<span class="text">AdminHub</span>
+		</a>
+		<ul class="side-menu top">
+			<li>
+				<a href="/adminhub/index.html">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li class="active">
+				<a href="/adminhub/image-management/index.html">
+					<i class='bx bxs-image'></i>
+					<span class="text">Image Management</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-doughnut-chart'></i>
+					<span class="text">Analytics</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-message-dots'></i>
+					<span class="text">Message</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-group'></i>
+					<span class="text">Team</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog'></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu'></i>
+			<a href="#" class="nav-link">Categories</a>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell'></i>
+				<span class="num">8</span>
+			</a>
+			<a href="#" class="profile">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Image Management</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="index.html">Dashboard</a>
+						</li>
+						<li>
+							<a href="#" class="active">Image Management</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="page-section">
+				<h2 class="section-title">Home Page Images <span class="section-underline"></span></h2>
+
+				<div class="table-data">
+					<div class="order">
+						<div class="head">
+							<h3>Current Home Page Images</h3>
+						</div>
+
+						<div class="img-grid">
+							<div class="img-card"
+								onclick="showImagePreview('hero-banner.jpg', 'Hero Banner', 'Home Page', '1200x400', '245 KB')">
+								<div class="img-name">hero-banner.jpg</div>
+								<div class="img-location">Section: Hero Section</div>
+							</div>
+
+							<div class="img-card"
+								onclick="showImagePreview('testimonial-bg.jpg', 'Testimonial Background', 'Home Page', '1920x300', '280 KB')">
+								<div class="img-name">testimonial-bg.jpg</div>
+								<div class="img-location">Section: Testimonials</div>
+							</div>
+
+							<div class="img-card"
+								onclick="showImagePreview('feature-1.jpg', 'Feature Image 1', 'Home Page', '600x400', '150 KB')">
+								<div class="img-name">feature-1.jpg</div>
+								<div class="img-location">Section: Features</div>
+							</div>
+
+							<div class="img-card"
+								onclick="showImagePreview('feature-2.jpg', 'Feature Image 2', 'Home Page', '600x400', '155 KB')">
+								<div class="img-name">feature-2.jpg</div>
+								<div class="img-location">Section: Features</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="upload-section">
+					<div class="upload-title">Upload New Home Page Images</div>
+					<div id="home-upload-dropzone" class="upload-area"
+						onclick="document.getElementById('home-file-input').click()">
+						<div class="upload-icon"><i class='bx bx-upload'></i></div>
+						<div class="upload-text">Drag & Drop images here or click to select files</div>
+						<button class="btn btn-primary">Select Files</button>
+						<input type="file" id="home-file-input" class="file-input" multiple accept="image/*">
+					</div>
+
+					<div class="preview-container" id="home-preview-container">
+						<!-- Preview items will be added here dynamically -->
+					</div>
+
+					<div style="margin-top: 20px; display: none;" id="home-upload-actions">
+						<button class="btn btn-primary" onclick="uploadHomeImages()">Upload Images</button>
+						<span style="margin-left: 10px; color: var(--dark-grey);">Selected images: <span
+								id="home-selected-count">0</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="page-section">
+				<h2 class="section-title">About Page Images <span class="section-underline"></span></h2>
+
+				<div class="table-data">
+					<div class="order">
+						<div class="head">
+							<h3>Current About Page Images</h3>
+						</div>
+
+						<div class="img-grid">
+							<div class="img-card"
+								onclick="showImagePreview('hero-banner.jpg', 'Hero Banner', 'about Page', '1200x400', '245 KB')">
+								<div class="img-name">hero-banner.jpg</div>
+								<div class="img-location">Section: Hero Section</div>
+							</div>
+
+							<div class="img-card"
+								onclick="showImagePreview('testimonial-bg.jpg', 'Testimonial Background', 'about Page', '1920x300', '280 KB')">
+								<div class="img-name">testimonial-bg.jpg</div>
+								<div class="img-location">Section: Testimonials</div>
+							</div>
+
+							<div class="img-card"
+								onclick="showImagePreview('feature-1.jpg', 'Feature Image 1', 'about Page', '600x400', '150 KB')">
+								<div class="img-name">feature-1.jpg</div>
+								<div class="img-location">Section: Features</div>
+							</div>
+
+							<div class="img-card"
+								onclick="showImagePreview('feature-2.jpg', 'Feature Image 2', 'about Page', '600x400', '155 KB')">
+								<div class="img-name">feature-2.jpg</div>
+								<div class="img-location">Section: Features</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="upload-section">
+					<div class="upload-title">Upload New About Page Images</div>
+					<div id="about-upload-dropzone" class="upload-area"
+						onclick="document.getElementById('about-file-input').click()">
+						<div class="upload-icon"><i class='bx bx-upload'></i></div>
+						<div class="upload-text">Drag & Drop images here or click to select files</div>
+						<button class="btn btn-primary">Select Files</button>
+						<input type="file" id="about-file-input" class="file-input" multiple accept="image/*">
+					</div>
+
+					<div class="preview-container" id="about-preview-container">
+						<!-- Preview items will be added here dynamically -->
+					</div>
+
+					<div style="margin-top: 20px; display: none;" id="about-upload-actions">
+						<button class="btn btn-primary" onclick="uploadaboutImages()">Upload Images</button>
+						<span style="margin-left: 10px; color: var(--dark-grey);">Selected images: <span
+								id="about-selected-count">0</span></span>
+					</div>
+				</div>
+			</div>
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+
+	<!-- IMAGE PREVIEW MODAL -->
+	<div class="modal" id="image-modal">
+		<div class="modal-content">
+			<span class="close-modal" onclick="closeModal()">&times;</span>
+			<img src="" alt="Image Preview" class="modal-img" id="modal-image">
+			<div class="modal-details">
+				<p><strong>Name:</strong> <span id="modal-name"></span></p>
+				<p><strong>Location:</strong> <span id="modal-location"></span></p>
+				<p><strong>Dimensions:</strong> <span id="modal-dimensions"></span></p>
+				<p><strong>Size:</strong> <span id="modal-size"></span></p>
+				<div class="modal-actions">
+					<button class="btn btn-primary" onclick="openReplaceImage()">Replace Image</button>
+					<button class="btn btn-danger" onclick="deleteImage()">Delete Image</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/adminhub/image-management/index.js"></script>
+	<script src="/adminhub/script.js"></script>
+</body>
+
+</html>
