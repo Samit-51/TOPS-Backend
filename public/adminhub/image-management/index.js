@@ -150,7 +150,7 @@ function sendToBackend(formData, sectionId, sectionName, btn, originalText) {
 	previewContainer.insertAdjacentElement('afterend', uploadingIndicator);
 
 	// Send to backend
-	fetch('http://localhost:3000/upload-images', {
+	fetch('https://tops-backend-ilnm.onrender.com/upload-images', {
 		method: 'POST',
 		body: formData,
 	})
