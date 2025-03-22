@@ -49,32 +49,50 @@ app.post('/login', (req, res) => {
 
 // Configure multer storage
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         // Get section information from the form data
         const sectionId = req.body.sectionId || 'main';
-        
+
         // Create directory if it doesn't exist
         const uploadDir = path.join(__dirname, 'public', 'uploads', sectionId);
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
-        
+
         cb(null, uploadDir);
     },
-    filename: function(req, file, cb) {
-        // Create a unique filename with timestamp
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    filename: function (req, file, cb) {
+        const sectionId = req.body.sectionId || 'main';
+        const metadataFile = path.join(__dirname, 'public', 'uploads', 'metadata', `${sectionId}-metadata.json`);
+
+        let imageCount = 0;
+
+        if (fs.existsSync(metadataFile)) {
+            let jsonFile = fs.readFileSync(metadataFile, 'utf-8');
+            let jsonData = JSON.parse(jsonFile);
+            imageCount = jsonData.length; // Number of existing images
+        }
+
+        // If this is the first file in the request, initialize a counter
+        if (!req.imageCounter) {
+            req.imageCounter = imageCount + 1;
+        }
+
+        // Assign a unique number and increment the counter for the next file
+        const currentImageCount = req.imageCounter;
+        req.imageCounter++;
+
+        // Generate filename like "image-1.png", "image-2.png", etc.
+        cb(null, `image-${currentImageCount}${path.extname(file.originalname)}`);
     }
 });
 
-// Create the multer upload instance
-const upload = multer({ 
+const upload = multer({
     storage: storage,
     limits: {
         fileSize: 5 * 1024 * 1024, // 5MB max file size
     },
-    fileFilter: function(req, file, cb) {
+    fileFilter: function (req, file, cb) {
         // Accept only image files
         if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
             return cb(new Error('Only image files are allowed!'), false);
@@ -85,40 +103,70 @@ const upload = multer({
 
 app.post('/upload-images', upload.array('images', 10), async (req, res) => {
     try {
-        // Get the uploaded files
         const files = req.files;
-        
-        // Extract section information
         const sectionId = req.body.sectionId || 'main';
         const sectionName = req.body.sectionName || 'Website';
-        
-        console.log(`Received ${files.length} images for section: ${sectionName}`);
-        
-        // Process each file (e.g., save metadata to database)
-        const processedImages = files.map(file => {
-            // Here you would typically save to a database
-            return {
-                filename: file.filename,
-                path: file.path,
+
+        // Extract dimension data
+        const dimensions = Array.isArray(req.body.dimension) ? req.body.dimension : [req.body.dimension];
+
+        // Metadata file path
+        const metadataDir = path.join(__dirname, 'public', 'uploads', 'metadata');
+        const metadataPath = path.join(metadataDir, `${sectionId}-metadata.json`);
+
+        // Ensure metadata directory exists
+        if (!fs.existsSync(metadataDir)) {
+            fs.mkdirSync(metadataDir, { recursive: true });
+        }
+
+        // Load existing metadata (as an object)
+        let existingMetadata = {};
+        if (fs.existsSync(metadataPath)) {
+            try {
+                existingMetadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+            } catch (err) {
+                console.error('Error reading existing metadata:', err);
+                existingMetadata = {};
+            }
+        }
+
+        // Process and store new images
+        files.forEach((file, index) => {
+            let width = null;
+            let height = null;
+
+            if (dimensions[index]) {
+                const [w, h] = dimensions[index].split('x').map(Number);
+                width = w;
+                height = h;
+            }
+
+            // Add new metadata entry using filename as the key
+            existingMetadata[path.parse(file.filename).name] = {
+                originalname: file.originalname,
                 size: formatFileSize(file.size),
                 mimetype: file.mimetype,
                 section: sectionId,
                 location: sectionName,
-                uploadDate: new Date()
+                width: width,
+                height: height,
+                uploadDate: new Date().toISOString(),
             };
         });
-        
-        // Respond with success
+
+        // Write updated metadata back to the file
+        fs.writeFileSync(metadataPath, JSON.stringify(existingMetadata, null, 2));
+
         res.status(200).json({
             success: true,
             message: `Successfully uploaded ${files.length} images for ${sectionName}`,
             uploadedCount: files.length,
-            images: processedImages,
+            images: Object.keys(existingMetadata),
             refreshGrid: true
         });
-        
+
     } catch (error) {
-        console.error('Error uploading images:', error);
+        console.error('Error uploading images:', error.message);
         res.status(500).json({
             success: false,
             message: `Error uploading images: ${error.message}`

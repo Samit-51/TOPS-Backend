@@ -87,6 +87,7 @@ function handleFiles(fileInput, previewContainer, uploadActions, selectedCount, 
 }
 
 function uploadSectionImages(sectionId, sectionName) {
+	const fileInput = document.getElementById(`${sectionId}-file-input`);
 	const previewItems = document.querySelectorAll(`#${sectionId}-preview-container .preview-item`);
 
 	if (previewItems.length > 0) {
@@ -108,16 +109,21 @@ function uploadSectionImages(sectionId, sectionName) {
 			// Get the image element inside the preview item
 			const img = item.querySelector('.preview-img');
 			if (img && img.src) {
+				// Get image dimensions
+				const width = img.naturalWidth || img.width;
+				const height = img.naturalHeight || img.height;
+
+				formData.append(`dimension`, `${width}x${height}`);
+
+				//Keep original file name
+				const OldFile = fileInput.files[index];
+				const FileName = OldFile ? OldFile.name : `image-${index}.${getImageTypeFromDataUrl(img.src)}`;
+
 				// Convert base64 data URL to blob
 				fetch(img.src)
 					.then(res => res.blob())
 					.then(blob => {
-						// Create a file from blob with a unique name
-						const file = new File(
-							[blob],
-							`${sectionId}-image-${index}.${getImageTypeFromDataUrl(img.src)}`,
-							{ type: blob.type }
-						);
+						const file = new File([blob], FileName, { type: blob.type });
 
 						// Append to form data with unique keys
 						formData.append(`images`, file);
@@ -150,7 +156,7 @@ function sendToBackend(formData, sectionId, sectionName, btn, originalText) {
 	previewContainer.insertAdjacentElement('afterend', uploadingIndicator);
 
 	// Send to backend
-	fetch('https://tops-backend-ilnm.onrender.com/upload-images', {
+	fetch('http://localhost:3000/upload-images', {
 		method: 'POST',
 		body: formData,
 	})
@@ -164,7 +170,8 @@ function sendToBackend(formData, sectionId, sectionName, btn, originalText) {
 			// Success handling
 			uploadingIndicator.remove();
 			alert(`Successfully uploaded ${data.uploadedCount} ${sectionName} images!`);
-
+			
+			console.log(data.DataFile);
 			// Reset the UI
 			document.getElementById(`${sectionId}-preview-container`).innerHTML = '';
 			document.getElementById(`${sectionId}-upload-actions`).style.display = 'none';
